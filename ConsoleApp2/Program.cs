@@ -2,34 +2,82 @@
 using System.Reflection.Metadata.Ecma335;
 using System.Collections.Generic;
 using System.Linq;
+using System.Diagnostics;
+using System.Reflection.Metadata;
 
 namespace ConsoleApp12
 {
     internal class Program
     {
+        static string path = "siemano.txt";
+        public static void tworzenie_i_odczytywanie_pliku() {
+
+            if (!File.Exists(path))
+            {
+                File.Create(path);
+                using (StreamWriter sw = File.CreateText(path))
+                {
+                    sw.WriteLine(Zmienne.stan_konta);
+                    sw.WriteLine(Zmienne.bilans);
+                }
+            }
+            else {
+                using (StreamReader sr = new StreamReader(path))
+                {
+                    string line;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        Zmienne.stan_konta = double.Parse(line);
+                    }
+                }
+            }
+        }
+
+
+        static void zapisywanie_pliku()
+        {
+            using (StreamWriter sw = new StreamWriter(path))
+            {
+                sw.WriteLine(Zmienne.stan_konta);
+            }
+        }
+
+
         static class Zmienne
         {
             public static double stan_konta;
+            public static double bilans;
+            public static double bet;
+            public static double mnoznik;
+            public static double win;
         }
         static void bilans()
         {
-            //Console.WriteLine("Twój bilans w kasynie wynosi win - bet")
+            Console.WriteLine("Twój bilans w kasynie wynosi win - bet");
         }
         static void wplaty()
         {
-            //double wplata += stan_konta;
-            //do{
-            //Console.WriteLine($"Aktualnie masz x monet\n Ile monet chcesz wpłacić?");
-            //while(!double.TryParse(Console.ReadLine(), out wplata")
+            double wplata;
+            do
+            {
+                Console.WriteLine($"Ile monet chcesz wpłacić?\nAktualnie masz {Zmienne.stan_konta} monet(y)");
+            } while (!double.TryParse(Console.ReadLine(), out wplata) || wplata < 0) ;
+            Zmienne.stan_konta += wplata;
+            zapisywanie_pliku();
+            menu();
         }
         static void wyplaty()
         {
-            //double wyplata -= stan_konta;
-            //do{
-            //Console.WriteLine($"Aktualnie masz x monet\n Ile monet chcesz wypłacić?");
-            //while(!double.TryParse(Console.ReadLine(), out wylata")
+            double wyplata;
+            do
+            {
+                Console.WriteLine($"Ile monet chcesz wpłacić?\nAktualnie masz {Zmienne.stan_konta} monet(y)");
+            } while (!double.TryParse(Console.ReadLine(), out wyplata) || wyplata > Zmienne.stan_konta || wyplata<0);
+            Zmienne.stan_konta -= wyplata;
+            zapisywanie_pliku();
+            menu();
         }
-        static void wybor()
+        static void menu()
         {
             Console.WriteLine("Witaj na naszej stronie! :D");
             Console.WriteLine($"Aktualnie posiadasz {Zmienne.stan_konta} monet");
@@ -37,6 +85,10 @@ namespace ConsoleApp12
             Console.WriteLine("2. Graj w lotto");
             Console.WriteLine("3. Doładuj monety do konta");
             Console.WriteLine("4. Wypłać monety z konta");
+        }
+        static void wybor()
+        {
+            zapisywanie_pliku();
             while (true)
             {
                 if (int.TryParse(Console.ReadLine(), out int a))
@@ -46,13 +98,12 @@ namespace ConsoleApp12
                         case 1:
                             crash();
                             break;
-                        //case 2:
-                        //wplaty();
-                        //break;
-                        //do{ Console.WriteLine("Ile monet chcesz dodac do swojego konta");} while(!double.TryParse(Console.ReadLine(), out dodaj = stan_konta+dodaj")
-                        //case 3:
-                        //wyplaty();
-                        //break;
+                        case 3:
+                            wplaty();
+                            break;
+                        case 4:
+                            wyplaty();
+                            break;
                         case 2:
                             lotto();
                             break;
@@ -130,14 +181,9 @@ namespace ConsoleApp12
         //porowynanie wybranych z wygranymi i jesli 3 takie same to wygrana iles tam itd...
         static void crash()
         {
-            double bet, srednia;
+            double srednia;
             double suma_crash = 0;
             int gra = 1;
-
-            do
-            {
-                Console.WriteLine("Ile chcesz mieć pieniędzy na start?");
-            } while (!double.TryParse(Console.ReadLine(), out Zmienne.stan_konta) || Zmienne.stan_konta <= 0);
 
             for (; ; )
             {
@@ -149,19 +195,21 @@ namespace ConsoleApp12
                     do
                     {
                         Console.WriteLine("\nKliknij 0, aby wyjść");
+                        Console.WriteLine($"Aktualnie masz {Zmienne.stan_konta} monet");
                         Console.WriteLine("Ile monet chcesz obstawić?");
-                    } while (!double.TryParse(Console.ReadLine(), out bet) || bet < 0);
+                    } while (!double.TryParse(Console.ReadLine(), out Zmienne.bet) || Zmienne.bet < 0);
 
-                    if (bet > Zmienne.stan_konta)
+                    if (Zmienne.bet > Zmienne.stan_konta)
                     {
                         Console.WriteLine("Nie masz tylu monet na koncie!");
                     }
-                } while (bet > Zmienne.stan_konta);
-                if (bet == 0)
+                } while (Zmienne.bet > Zmienne.stan_konta);
+                if (Zmienne.bet == 0)
                 {
+                    menu();
                     break;
                 }
-                Zmienne.stan_konta = Zmienne.stan_konta - bet;
+                Zmienne.stan_konta = Zmienne.stan_konta - Zmienne.bet;
 
                 //wzor crash
                 Random cyfra = new Random();
@@ -177,7 +225,7 @@ namespace ConsoleApp12
                 suma_crash += crash;
 
                 //petla mnoznika
-                double mnoznik;
+               // double mnoznik;
                 for (mnoznik = 1; mnoznik <= crash; mnoznik += 0.01)
                 {
 
@@ -202,7 +250,7 @@ namespace ConsoleApp12
                     if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Enter)
                     {
                         Console.ForegroundColor = ConsoleColor.White;
-                        double win = bet * mnoznik;
+                       // double win = Zmienne.bet * mnoznik;
                         Console.WriteLine($"Opuściłeś rozgrywkę przy mnożniku {Math.Round(mnoznik, 2)}x i wygrałeś {Math.Round(win, 2)} monet(y)");
                         Console.WriteLine($"Gra zakończona mnożnikiem {Math.Round(crash, 2)}x");
                         Zmienne.stan_konta = Zmienne.stan_konta + win;
@@ -229,7 +277,7 @@ namespace ConsoleApp12
                 else if (mnoznik > crash)
                 {
                     Console.ForegroundColor = ConsoleColor.White;
-                    Console.WriteLine($"Przegrałeś {bet} monet(y)\nCrash {Math.Round(crash, 2)}x\n");
+                    Console.WriteLine($"Przegrałeś {Zmienne.bet} monet(y)\nCrash {Math.Round(crash, 2)}x\n");
                     Console.WriteLine($"Aktualnie masz {Math.Round(Zmienne.stan_konta, 2)} monet(y)");
                 }
 
@@ -238,10 +286,13 @@ namespace ConsoleApp12
                 srednia = suma_crash / gra;
                 Console.WriteLine($"Średni crash wynosi {Math.Round(srednia, 2)}");
                 gra += 1;
+                zapisywanie_pliku();
             }
         }
         static void Main(string[] args)
         {
+            tworzenie_i_odczytywanie_pliku();
+            menu();
             wybor();
         }
         //koniec petli
