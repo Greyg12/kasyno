@@ -24,8 +24,16 @@ namespace ConsoleApp12
             else {
                 using (StreamReader sr = new StreamReader(path))
                 {
-                    
-                    Zmienne.stan_konta = double.Parse(sr.ReadLine());
+                    try
+                    {
+                        Zmienne.stan_konta = double.Parse(sr.ReadLine());
+                    }
+                    catch (System.ArgumentNullException)
+                    {
+                        Zmienne.stan_konta = 0;
+                    }
+
+
                 }
             }
         }
