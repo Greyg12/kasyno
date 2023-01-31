@@ -301,7 +301,7 @@ namespace ConsoleApp12
         }
         static void wybor_ruletka()
         {
-            Console.WriteLine($"\nStan konta - {Zmienne.stan_konta}\n1. Wybór cyfry od 0 do 36\n2. Wybór czarnych pól\n3. Wybór czerwonych pól\n4. Wybór zakresu od 1 do 12\n5. Wybór zakresu od 13 do 24\n6. Wybór zakresu od 25 do 36\n7. Wybór zakresu od 1 do 18\n8 .Wybór zakresu od 19 do 36\n");
+            Console.WriteLine($"\nStan konta - {Zmienne.stan_konta}\n1. Wybór cyfry od 0 do 36\n2. Wybór czarnych pól\n3. Wybór czerwonych pól\n4. Wybór zakresu od 1 do 12\n5. Wybór zakresu od 13 do 24\n6. Wybór zakresu od 25 do 36\n7. Wybór zakresu od 1 do 18\n8 .Wybór zakresu od 19 do 36\n0. Wyjdź");
         }
         static void menu_ruletka(Ruletka ruletka)
         {
@@ -335,6 +335,12 @@ namespace ConsoleApp12
                         case 8:
                             od19do36(ruletka.LosujPole());
                             break;
+                        case 0:
+                            menu();
+                            wybor();
+                            break;
+
+
                     }
                 }
             }
