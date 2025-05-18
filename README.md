@@ -1,4 +1,4 @@
-# Project: Casino
+# Project: OOPkasyno
 
 This project is a simple console application that simulates a casino with various games of chance. The user can deposit and withdraw coins from their account and play games such as crash, lotto, roulette, and coin flip.
 
@@ -19,7 +19,7 @@ This project is a simple console application that simulates a casino with variou
 
 ## Project Description
 
-The casino application allows the user to interact with various games of chance. The program stores the user's account balance in a text file and allows playing games with coin betting. Depending on the game results, the account balance is updated and saved.
+The OOPkasyno application allows the user to interact with various games of chance. The program stores the user's account balance in a text file and allows playing games with coin betting. Depending on the game results, the account balance is updated and saved.
 
 ### Main features:
 - **Deposit and withdrawal of coins**: The user can deposit or withdraw coins from their account.
